@@ -8,16 +8,48 @@ import java.util.Arrays;
 
 //schemas will be stored off ledger
 public class ProductSchemaV1 extends MappedSchema {
+
+    /**
+     * This class must extend the MappedSchema class. Its name is based on the SchemaFamily name
+     * and the associated version number abbreviation (V1, V2... Vn).
+     * In the constructor, use the super keyword to call the constructor of MappedSchema with
+     * the following arguments: a class literal representing the schema family,
+     * a version number and a collection of mappedTypes (class literals) which
+     * represent JPA entity classes that the ORM layer needs to be configured with for this schema.
+     */
+
     public ProductSchemaV1() {
         super(ProductSchema.class, 1, Arrays.asList(PersistentProduct.class, PersistentProductDetail.class));
     }
 
-    // add the entity and table annotations
+    /**
+     * The @entity annotation signifies that the specified POJO class' non-transient fields
+     * should be persisted to a relational database using the services of an entity manager.
+     *
+     * The @table annotation specifies properties of the table that will be created to
+     * contain the persisted data, in this case we have
+     * specified a name argument which will be used the table's title.
+     */
+
     @Entity
     @Table(name = "product")
     public static class PersistentProduct {
+
+        /**
+         * The @Column annotations specify the columns that will comprise
+         * the inserted table and specify the shape of the fields and associated
+         * data types of each database entry.
+         */
+
         @Id @Column(name = "sku") private final Integer sku;
         @Column(name = "name") private final String name;
+
+        /**
+         * The @OneToOne annotation specifies a one-to-one relationship.
+         *
+         * The @JoinColumn and @JoinColumns annotations specify
+         * on which columns these tables will be joined on.
+         */
 
         // you could also use many to one, one to many joins
         @OneToOne(cascade = CascadeType.PERSIST)
@@ -63,6 +95,8 @@ public class ProductSchemaV1 extends MappedSchema {
     public static class PersistentProductDetail {
 
         @Column(name = "detail") private final String detail;
+
+        // The @Id annotation marks this field as the primary key of the persisted entity.
         @Id
         @Column(name = "detail_id")
         private final Integer detail_id;

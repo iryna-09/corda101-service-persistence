@@ -35,16 +35,23 @@ public class QueryDatabaseEntityManagerFlow extends FlowLogic<String> {
         try {
             //to create new products in product table
             getServiceHub().withEntityManager(entityManager -> {
-                ProductSchemaV1.PersistentProductDetail persistentProductDetail = new ProductSchemaV1.PersistentProductDetail(product_details, detail_id);
-                ProductSchemaV1.PersistentProduct ob = new ProductSchemaV1.PersistentProduct(sku, name, persistentProductDetail);
+                ProductSchemaV1.PersistentProductDetail persistentProductDetail =
+                        new ProductSchemaV1.PersistentProductDetail(product_details, detail_id);
+
+                ProductSchemaV1.PersistentProduct ob =
+                        new ProductSchemaV1.PersistentProduct(sku, name, persistentProductDetail);
                 entityManager.persist(ob);
 
             });
 
             //query the product table to get the records
             List<ProductSchemaV1.PersistentProduct> list = getServiceHub().withEntityManager(entityManager -> {
-                CriteriaQuery<ProductSchemaV1.PersistentProduct> query = entityManager.getCriteriaBuilder().createQuery(ProductSchemaV1.PersistentProduct.class);
-                Root<ProductSchemaV1.PersistentProduct> type = query.from(ProductSchemaV1.PersistentProduct.class);
+                CriteriaQuery<ProductSchemaV1.PersistentProduct> query =
+                        entityManager.getCriteriaBuilder().createQuery(ProductSchemaV1.PersistentProduct.class);
+
+                Root<ProductSchemaV1.PersistentProduct> type =
+                        query.from(ProductSchemaV1.PersistentProduct.class);
+
                 query.select(type);
                 return entityManager.createQuery(query).getResultList();
 
