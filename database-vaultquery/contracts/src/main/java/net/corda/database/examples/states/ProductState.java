@@ -13,8 +13,10 @@ import net.corda.core.schemas.QueryableState;
 import java.util.Arrays;
 import java.util.List;
 
-//1 state can map to multiple schemas. state will always be stored on ledger. If you want to map your state to custom schemas/ custom tables, and you want to
-//query these custom schemas(which are stored off ledger) , then make sure to implement state with QueryableState
+// 1 state can map to multiple schemas. state will always be stored on ledger.
+// If you want to map your state to custom schemas/custom tables, and you want to
+// query these custom schemas(which are stored off ledger),
+// then make sure to implement state with QueryableState
 @BelongsToContract(ProductContract.class)
 public class ProductState implements ContractState, QueryableState {
     private final Integer sku;
@@ -70,8 +72,7 @@ public class ProductState implements ContractState, QueryableState {
         if (schema instanceof ProductSchemaV1) {
             return new ProductSchemaV1.PersistentProduct(
                     getSku(),
-                    getName(),
-                    new ProductSchemaV1.PersistentProductDetail(getDetail(), getDetail_id()));
+                    getName());
         } else {
             throw new IllegalArgumentException("Unrecognised schema $schema");
         }

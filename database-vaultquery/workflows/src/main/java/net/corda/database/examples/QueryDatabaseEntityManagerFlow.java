@@ -16,14 +16,10 @@ public class QueryDatabaseEntityManagerFlow extends FlowLogic<String> {
 
     private Integer sku;
     private String name;
-    private Integer detail_id;
-    private String product_details;
 
-    public QueryDatabaseEntityManagerFlow(Integer sku, String name, Integer detail_id, String product_details) {
+    public QueryDatabaseEntityManagerFlow(Integer sku, String name) {
         this.sku = sku;
         this.name = name;
-        this.detail_id = detail_id;
-        this.product_details = product_details;
     }
 
     @Suspendable
@@ -33,17 +29,6 @@ public class QueryDatabaseEntityManagerFlow extends FlowLogic<String> {
         String result = "Product Details : ";
 
         try {
-            //to create new products in product table
-            getServiceHub().withEntityManager(entityManager -> {
-                ProductSchemaV1.PersistentProductDetail persistentProductDetail =
-                        new ProductSchemaV1.PersistentProductDetail(product_details, detail_id);
-
-                ProductSchemaV1.PersistentProduct ob =
-                        new ProductSchemaV1.PersistentProduct(sku, name, persistentProductDetail);
-                entityManager.persist(ob);
-
-            });
-
             //query the product table to get the records
             List<ProductSchemaV1.PersistentProduct> list = getServiceHub().withEntityManager(entityManager -> {
                 CriteriaQuery<ProductSchemaV1.PersistentProduct> query =

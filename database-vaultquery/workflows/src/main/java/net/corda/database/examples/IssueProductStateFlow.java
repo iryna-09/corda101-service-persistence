@@ -36,17 +36,17 @@ public class IssueProductStateFlow {
             final Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
 
             ProductState productState = new ProductState(1, "test1", 101, "details", issuer, getOurIdentity());
-
+            //create tx
             final TransactionBuilder txBuilder = new TransactionBuilder(notary)
                     .addOutputState(productState)
                     .addCommand(new ProductContract.Commands.Create(), getOurIdentity().getOwningKey());
-
+            //run the contract
             txBuilder.verify(getServiceHub());
-
+            //sign ourselves only
             final SignedTransaction partSignedTx = getServiceHub().signInitialTransaction(txBuilder);
 
             FlowSession otherPartySession = initiateFlow(issuer);
-
+            // store on ledger
             return subFlow(new FinalityFlow(partSignedTx, Arrays.asList(otherPartySession)));
         }
     }
