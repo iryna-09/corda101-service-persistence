@@ -35,6 +35,7 @@ public class ShipOrderService extends SingletonSerializeAsToken {
                                         serviceHub.getNetworkMapCache().getPeerByLegalName(new CordaX500Name("Shipper", "San Diego", "US"))
                                 )) {
                                     executor.execute(() -> {
+                                        //
                                         serviceHub.startFlow(new ShipOrderFlow.ShipOrderFlowInitiator());
                                     });
                                 }
